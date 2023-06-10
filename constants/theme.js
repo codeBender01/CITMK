@@ -6,6 +6,8 @@ const colors = {
   yellowProcess: "#FF9900",
   white: "#FFFFFF",
   mainFont: "#232325",
+  secFont: "#6F727A",
+  infoFont: "#363636",
 };
 
 const fonts = {
