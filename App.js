@@ -1,4 +1,5 @@
 import { NavigationContainer } from "@react-navigation/native";
+import { useEffect, useState, useCallback } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
   Feather,
@@ -14,7 +15,11 @@ import Messages from "./screens/messages/messages";
 import Settings from "./screens/settings/settings";
 import { ImageBackground } from "react-native";
 import { DefaultTheme } from "@react-navigation/native";
+import img from "./assets/images/bg1.jpg";
+import * as SplashScreen from "expo-splash-screen";
+import { useFonts } from "expo-font";
 
+SplashScreen.preventAutoHideAsync();
 const MyTheme = {
   ...DefaultTheme,
   colors: {
@@ -68,20 +73,45 @@ const tabs = [
 const Tab = createBottomTabNavigator();
 
 export default function App() {
+  const [isAppReady, setIsAppReady] = useState(false);
+
+  const [loaded] = useFonts({
+    InterReg: require("./assets/fonts/Inter-Regular.ttf"),
+    InterBold: require("./assets/fonts/Inter-Bold.ttf"),
+    InterMed: require("./assets/fonts/Inter-Medium.ttf"),
+  });
+
+  useEffect(() => {
+    if (img) {
+      setIsAppReady(true);
+    }
+  }, []);
+
+  const onLayoutRootView = useCallback(async () => {
+    if (isAppReady && loaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [isAppReady, loaded]);
+
+  if (!isAppReady && !loaded) {
+    return null;
+  }
+
   return (
     <ImageBackground
-      source={require("./assets/squid.jpg")}
-      resizeMode="stretch"
+      source={img}
+      resizeMode="cover"
       style={{
         flex: 1,
       }}
+      onLayout={onLayoutRootView}
     >
       <NavigationContainer theme={MyTheme}>
         <Tab.Navigator
           screenOptions={{
             tabBarStyle: {
               backgroundColor: colors.navbarBg,
-              flexDirection: "column",
+
               height: 50,
             },
             tabBarActiveTintColor: "white",

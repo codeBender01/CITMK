@@ -5,6 +5,13 @@ const colors = {
   grayFinished: "#828282",
   yellowProcess: "#FF9900",
   white: "#FFFFFF",
+  mainFont: "#232325",
 };
 
-export { colors };
+const fonts = {
+  regular: "InterReg",
+  medium: "InterMed",
+  bold: "InterBold",
+};
+
+export { colors, fonts };
