@@ -9,6 +9,7 @@ import {
 } from "@expo/vector-icons";
 import { colors } from "./constants/theme";
 import Users from "./screens/users/users";
+import AddUser from "./screens/AddUser/addUser";
 import Analytics from "./screens/analytics/analytics";
 import Orders from "./screens/orders/orders";
 import Messages from "./screens/messages/messages";
@@ -18,6 +19,10 @@ import { DefaultTheme } from "@react-navigation/native";
 import img from "./assets/images/bg1.jpg";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
+import { createStackNavigator } from "@react-navigation/stack";
+import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
+
+const UserStack = createStackNavigator();
 
 SplashScreen.preventAutoHideAsync();
 const MyTheme = {
@@ -31,7 +36,7 @@ const MyTheme = {
 const tabs = [
   {
     name: "Пользователи",
-    component: Users,
+    component: UserScreen,
     tabBarIcon: ({ color, size }) => (
       <Feather name="user" size={size} color={color} />
     ),
@@ -72,6 +77,22 @@ const tabs = [
 
 const Tab = createBottomTabNavigator();
 
+function UserScreen() {
+  return (
+    <UserStack.Navigator
+      screenOptions={{
+        gestureEnabled: true,
+        gestureDirection: "horizontal",
+        headerShown: false,
+      }}
+      initialRouteName="Пользователи"
+    >
+      <UserStack.Screen name="UserStackScreen" component={Users} />
+      <UserStack.Screen name="AddUser" component={AddUser} />
+    </UserStack.Navigator>
+  );
+}
+
 export default function App() {
   const [loaded] = useFonts({
     InterReg: require("./assets/fonts/Inter-Regular.ttf"),
@@ -90,7 +111,12 @@ export default function App() {
   }
 
   return (
-    <>
+    <SafeAreaView
+      style={{
+        width: "100%",
+        height: "100%",
+      }}
+    >
       <ImageBackground
         source={img}
         resizeMode="cover"
@@ -110,7 +136,9 @@ export default function App() {
               },
               tabBarActiveTintColor: "white",
               tabBarInactiveTintColor: "#fff",
+              gestureEnabled: true,
             }}
+            initialRouteName="Заявки"
           >
             {tabs.map((tab) => {
               return (
@@ -133,6 +161,6 @@ export default function App() {
           </Tab.Navigator>
         </NavigationContainer>
       </ImageBackground>
-    </>
+    </SafeAreaView>
   );
 }

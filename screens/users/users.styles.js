@@ -8,6 +8,18 @@ const styles = StyleSheet.create({
     paddingVertical: 50,
     paddingHorizontal: 25,
     marginHorizontal: "auto",
+    position: "relative",
+  },
+  addUserBtn: {
+    backgroundColor: colors.greenAccept,
+    width: 45,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 100,
+    paddingVertical: 5,
+    position: "absolute",
+    bottom: 0,
+    right: 0,
   },
 });
 
