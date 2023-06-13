@@ -12,14 +12,14 @@ const styles = StyleSheet.create({
   },
   addUserBtn: {
     backgroundColor: colors.greenAccept,
-    width: 45,
+    width: 55,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 100,
-    paddingVertical: 5,
+    paddingVertical: 10,
     position: "absolute",
-    bottom: 0,
-    right: 0,
+    bottom: "3%",
+    right: "3%",
   },
 });
 

@@ -152,7 +152,6 @@ export default function App() {
                     tabBarActiveBackgroundColor: "rgba(0, 0, 0, 0.4)",
                     tabBarItemStyle: {
                       paddingVertical: 5,
-                      marginBottom: 5,
                     },
                   }}
                 />
