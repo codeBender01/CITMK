@@ -1,10 +1,12 @@
 import React from "react";
 import { View, Text } from "react-native";
+import styles from "./messages.styles";
+import MessageCard from "../../components/MessageCard/MessageCard";
 
 function Messages() {
   return (
-    <View>
-      <Text>Messages</Text>
+    <View style={styles.container}>
+      <MessageCard />
     </View>
   );
 }

@@ -79,7 +79,6 @@ function AddUser({ navigation }) {
               />
               <TouchableOpacity
                 onPress={() => {
-                  console.log(isPickerPressed);
                   setIsPickerPressed(!isPickerPressed);
                 }}
                 activeOpacity={1}
