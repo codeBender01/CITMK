@@ -87,7 +87,6 @@ const styles = StyleSheet.create({
   },
   btn: {
     border: "1px solid #E0E0E9",
-    shadowColor: "rgba(131, 119, 198, 0.11)",
     width: "48%",
     paddingVertical: 10,
     marginBottom: 5,

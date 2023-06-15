@@ -9,7 +9,9 @@ import {
 } from "@expo/vector-icons";
 import { colors } from "./constants/theme";
 import Users from "./screens/users/users";
-import AddUser from "./screens/AddUser/addUser";
+import AddUser from "./screens/addUser/addUser";
+import Wallpapers from "./screens/wallpapers/wallpapers";
+import Services from "./screens/services/services";
 import Analytics from "./screens/analytics/analytics";
 import Orders from "./screens/orders/orders";
 import Messages from "./screens/messages/messages";
@@ -20,9 +22,9 @@ import img from "./assets/images/bg1.jpg";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
 import { createStackNavigator } from "@react-navigation/stack";
-import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 
 const UserStack = createStackNavigator();
+const SettingsStack = createStackNavigator();
 
 SplashScreen.preventAutoHideAsync();
 const MyTheme = {
@@ -68,7 +70,7 @@ const tabs = [
   },
   {
     name: "Настройки",
-    component: Settings,
+    component: SettingsScreen,
     tabBarIcon: ({ color, size }) => (
       <Ionicons name="settings-outline" size={size} color={color} />
     ),
@@ -90,6 +92,23 @@ function UserScreen() {
       <UserStack.Screen name="UserStackScreen" component={Users} />
       <UserStack.Screen name="AddUser" component={AddUser} />
     </UserStack.Navigator>
+  );
+}
+
+function SettingsScreen() {
+  return (
+    <SettingsStack.Navigator
+      screenOptions={{
+        gestureEnabled: true,
+        gestureDirection: "horizontal",
+        headerShown: false,
+      }}
+      initialRouteName="Настройки"
+    >
+      <SettingsStack.Screen name="SettingsScreen" component={Settings} />
+      <SettingsStack.Screen name="Services" component={Services} />
+      <SettingsStack.Screen name="Wallpapers" component={Wallpapers} />
+    </SettingsStack.Navigator>
   );
 }
 
@@ -134,7 +153,7 @@ export default function App() {
                 paddingHorizontal: 10,
                 height: 60,
               },
-              tabBarActiveTintColor: "white",
+              tabBarActiveTintColor: "#fff",
               tabBarInactiveTintColor: "#fff",
               gestureEnabled: true,
             }}

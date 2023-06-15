@@ -1,10 +1,11 @@
 import { useState, useCallback } from "react";
 import {
-  View,
+  ScrollView,
   Text,
   TouchableOpacity,
   TextInput,
   TouchableWithoutFeedback,
+  View,
 } from "react-native";
 import styles from "./addUser.styles";
 import { AntDesign } from "@expo/vector-icons";
@@ -25,7 +26,7 @@ function AddUser({ navigation }) {
         setIsPickerPressed(false);
       }}
     >
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <TouchableOpacity
           onPress={() => {
             navigation.goBack();
@@ -112,7 +113,7 @@ function AddUser({ navigation }) {
             <Text style={styles.submitBtnText}>Сохранить</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </ScrollView>
     </TouchableWithoutFeedback>
   );
 }
