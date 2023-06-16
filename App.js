@@ -22,6 +22,8 @@ import img from "./assets/images/bg1.jpg";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
 import { createStackNavigator } from "@react-navigation/stack";
+import { StoreProvider } from "easy-peasy";
+import store from "./store";
 
 const UserStack = createStackNavigator();
 const SettingsStack = createStackNavigator();
@@ -130,55 +132,57 @@ export default function App() {
   }
 
   return (
-    <SafeAreaView
-      style={{
-        width: "100%",
-        height: "100%",
-      }}
-    >
-      <ImageBackground
-        source={img}
-        resizeMode="cover"
+    <StoreProvider store={store}>
+      <SafeAreaView
         style={{
-          flex: 1,
+          width: "100%",
+          height: "100%",
         }}
-        onLayout={onLayoutRootView}
-        transition={false}
       >
-        <NavigationContainer theme={MyTheme}>
-          <Tab.Navigator
-            screenOptions={{
-              tabBarStyle: {
-                backgroundColor: colors.navbarBg,
-                paddingHorizontal: 10,
-                height: 60,
-              },
-              tabBarActiveTintColor: "#fff",
-              tabBarInactiveTintColor: "#fff",
-              gestureEnabled: true,
-            }}
-            initialRouteName="Заявки"
-          >
-            {tabs.map((tab) => {
-              return (
-                <Tab.Screen
-                  key={tab.name}
-                  name={tab.name}
-                  component={tab.component}
-                  options={{
-                    tabBarIcon: tab.tabBarIcon,
-                    headerShown: false,
-                    tabBarActiveBackgroundColor: "rgba(0, 0, 0, 0.4)",
-                    tabBarItemStyle: {
-                      paddingVertical: 5,
-                    },
-                  }}
-                />
-              );
-            })}
-          </Tab.Navigator>
-        </NavigationContainer>
-      </ImageBackground>
-    </SafeAreaView>
+        <ImageBackground
+          source={img}
+          resizeMode="cover"
+          style={{
+            flex: 1,
+          }}
+          onLayout={onLayoutRootView}
+          transition={false}
+        >
+          <NavigationContainer theme={MyTheme}>
+            <Tab.Navigator
+              screenOptions={{
+                tabBarStyle: {
+                  backgroundColor: colors.navbarBg,
+                  paddingHorizontal: 10,
+                  height: 60,
+                },
+                tabBarActiveTintColor: "#fff",
+                tabBarInactiveTintColor: "#fff",
+                gestureEnabled: true,
+              }}
+              initialRouteName="Заявки"
+            >
+              {tabs.map((tab) => {
+                return (
+                  <Tab.Screen
+                    key={tab.name}
+                    name={tab.name}
+                    component={tab.component}
+                    options={{
+                      tabBarIcon: tab.tabBarIcon,
+                      headerShown: false,
+                      tabBarActiveBackgroundColor: "rgba(0, 0, 0, 0.4)",
+                      tabBarItemStyle: {
+                        paddingVertical: 5,
+                      },
+                    }}
+                  />
+                );
+              })}
+            </Tab.Navigator>
+          </NavigationContainer>
+        </ImageBackground>
+      </SafeAreaView>
+    </StoreProvider>
   );
 }
