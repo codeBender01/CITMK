@@ -5,7 +5,7 @@ import styles from "./orderCard.styles";
 import { colors } from "../../constants/theme";
 import FadeInView from "../../animations/FadeInView";
 
-function OrderCard() {
+function OrderCard({ order, status, statusColor, buttonText }) {
   const [isIconPressed, setIsIconPressed] = useState(false);
 
   return (
@@ -17,11 +17,11 @@ function OrderCard() {
           textTransform: "uppercase",
         }}
       >
-        Название организации
+        {order.item.Organization}
       </Text>
 
-      <View style={styles.orderLabel}>
-        <Text style={styles.orderLabelText}>Выполнено</Text>
+      <View style={{ ...styles.orderLabel, backgroundColor: statusColor }}>
+        <Text style={styles.orderLabelText}>{status}</Text>
       </View>
       <View style={isIconPressed ? styles.arrowUp : styles.arrowDown}>
         <TouchableOpacity
@@ -40,21 +40,26 @@ function OrderCard() {
       {isIconPressed ? (
         <FadeInView>
           <View>
-            <Text>Описание задачи</Text>
+            <Text>{order.item.Options}</Text>
+          </View>
+          <View>
+            <Text>{order.item.description}</Text>
           </View>
           <View style={styles.actionBtns}>
-            <TouchableOpacity style={{ ...styles.btn, ...styles.btnEdit }}>
-              <Text
-                style={{
-                  textAlign: "center",
-                  fontWeight: 600,
-                  color: colors.white,
-                  fontSize: 14,
-                }}
-              >
-                Принять
-              </Text>
-            </TouchableOpacity>
+            {buttonText[0] === "" ? null : (
+              <TouchableOpacity style={{ ...styles.btn, ...styles.btnEdit }}>
+                <Text
+                  style={{
+                    textAlign: "center",
+                    fontWeight: 600,
+                    color: colors.white,
+                    fontSize: 14,
+                  }}
+                >
+                  {buttonText[0]}
+                </Text>
+              </TouchableOpacity>
+            )}
             <TouchableOpacity style={{ ...styles.btn, ...styles.btnDelete }}>
               <Text
                 style={{
@@ -64,7 +69,7 @@ function OrderCard() {
                   fontSize: 14,
                 }}
               >
-                Отказаться
+                {buttonText[1]}
               </Text>
             </TouchableOpacity>
           </View>

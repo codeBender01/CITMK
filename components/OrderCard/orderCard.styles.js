@@ -9,6 +9,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: 10,
     position: "relative",
+    marginVertical: 10,
   },
   orgName: {
     color: colors.infoFont,
@@ -43,7 +44,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 0,
     top: 0,
-    backgroundColor: colors.grayFinished,
+
     paddingHorizontal: 30,
     paddingVertical: 3,
     borderTopRightRadius: 10,

@@ -1,20 +1,14 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import d from "./data.json";
 
-const useFetch = (endpoint, query) => {
+const useFetch = (endpoint) => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const options = {
     method: "GET",
-    url: `https://jsearch.p.rapidapi.com/${endpoint}`,
-    params: { ...query },
-    headers: {
-      "X-RapidAPI-Key": "12e6855382msh7d475d3623546b7p14d75ejsnc64c09d3417e",
-      "X-RapidAPI-Host": "jsearch.p.rapidapi.com",
-    },
+    url: `http://192.168.1.20:5005/api/${endpoint}`,
   };
 
   const fetchData = async () => {
@@ -23,11 +17,17 @@ const useFetch = (endpoint, query) => {
     try {
       const res = await axios.request(options);
 
-      setData(res.data.data);
+      setData(res.data.services);
+
       setIsLoading(false);
     } catch (error) {
       setError(error);
-      setData(d.data);
+      if (!error.response) {
+        // network error
+        console.log("Error: Network Error");
+      } else {
+        setError(error.response.data.message);
+      }
     } finally {
       setIsLoading(false);
     }

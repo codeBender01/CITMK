@@ -24,6 +24,7 @@ import { useFonts } from "expo-font";
 import { createStackNavigator } from "@react-navigation/stack";
 import { StoreProvider } from "easy-peasy";
 import store from "./store";
+import { useStoreState } from "easy-peasy";
 
 const UserStack = createStackNavigator();
 const SettingsStack = createStackNavigator();
