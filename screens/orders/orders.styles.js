@@ -31,6 +31,9 @@ const styles = StyleSheet.create({
   activeTab: {
     backgroundColor: colors.white,
   },
+  indicator: {
+    marginTop: 25,
+  },
 });
 
 export default styles;

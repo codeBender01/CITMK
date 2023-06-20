@@ -9,13 +9,13 @@ import {
 import { colors } from "../../constants/theme";
 import FadeInView from "../../animations/FadeInView";
 
-function UserCard() {
+function UserCard({ user, onDelete }) {
   const [isIconPressed, setIsIconPressed] = useState(false);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.username}>Название организации</Text>
-      <Text style={styles.orgName}>Название отдела</Text>
+      <Text style={styles.username}>{user.item.name}</Text>
+      <Text style={styles.orgName}>{user.item.organization}</Text>
       <View style={isIconPressed ? styles.arrowUp : styles.arrowDown}>
         <TouchableOpacity
           onPress={() => {
@@ -38,11 +38,11 @@ function UserCard() {
                 size={26}
                 color="black"
               />
-              <Text style={styles.infoText}>condom@gmail.com</Text>
+              <Text style={styles.infoText}>{user.item.email}</Text>
             </View>
             <View style={styles.moreInfo}>
               <EvilIcons name="location" size={26} color="black" />
-              <Text style={styles.infoText}>Gorogly şayoly</Text>
+              <Text style={styles.infoText}>{user.item.role}</Text>
             </View>
             <View style={styles.actionBtns}>
               <TouchableOpacity style={{ ...styles.btn, ...styles.btnEdit }}>
@@ -60,6 +60,7 @@ function UserCard() {
               <TouchableOpacity
                 title="Удалить"
                 style={{ ...styles.btn, ...styles.btnDelete }}
+                onPress={onDelete}
               >
                 <Text
                   style={{

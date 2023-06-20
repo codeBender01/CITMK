@@ -12,6 +12,7 @@ import { useStoreState, useStoreActions } from "easy-peasy";
 import useFetch from "../../hooks/useFetch";
 import { colors } from "../../constants/theme";
 import axios from "axios";
+import NoData from "../../components/NoData/NoData";
 
 const orderTabs = ["Новые заявки", "В работе", "Выполненные"];
 
@@ -30,11 +31,12 @@ function Orders() {
   const [accepted, setAccepted] = useState([]);
   const [done, setDone] = useState([]);
   const [sent, setSent] = useState([]);
+  const [isThereData, setIsThereData] = useState(true);
 
   useEffect(() => {
     const fetchAllOrders = async () => {
       await axios
-        .get("http://192.168.1.20:5005/api/service/sended/all")
+        .get("http://localhost:5005/api/service/sended/all")
         .then((res) => {
           setSent(res.data.services);
         })
@@ -43,7 +45,7 @@ function Orders() {
         });
 
       await axios
-        .get("http://192.168.1.20:5005/api/service/accepted/get")
+        .get("http://localhost:5005/api/service/accepted/get")
         .then((res) => {
           setAccepted(res.data.acceptedServices);
         })
@@ -52,7 +54,7 @@ function Orders() {
         });
 
       await axios
-        .get("http://192.168.1.20:5005/api/service/done/get")
+        .get("http://localhost:5005/api/service/done/get")
         .then((res) => {
           setDone(res.data.serviceDone);
         })
@@ -62,7 +64,12 @@ function Orders() {
     };
 
     fetchAllOrders();
-  }, [setAccepted, setDone, setSent]);
+    if (sent.length === 0 || data.length === 0) {
+      setTimeout(() => {
+        setIsThereData(false);
+      }, 3000);
+    }
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -100,20 +107,30 @@ function Orders() {
         })}
       </View>
 
-      {sent.length === 0 ? (
-        <ActivityIndicator />
+      {!isThereData ? (
+        <NoData text={"В заяках пусто"} />
       ) : (
-        <FlatList
-          data={data.length === 0 ? sent : data}
-          renderItem={(d) => (
-            <OrderCard
-              order={d}
-              status={status}
-              statusColor={statusColor}
-              buttonText={buttonText}
+        <>
+          {isThereData ? (
+            <ActivityIndicator
+              color={colors.navbarBg}
+              style={styles.indicator}
+              size="large"
             />
-          )}
-        />
+          ) : null}
+
+          <FlatList
+            data={data.length === 0 ? sent : data}
+            renderItem={(d) => (
+              <OrderCard
+                order={d}
+                status={status}
+                statusColor={statusColor}
+                buttonText={buttonText}
+              />
+            )}
+          />
+        </>
       )}
     </View>
   );

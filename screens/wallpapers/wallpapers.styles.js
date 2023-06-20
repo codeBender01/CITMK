@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
   },
   images: {
     width: "100%",
-    height: "100%",
+    height: "60%",
     flexDirection: "row",
     flexWrap: "wrap",
     gap: 10,

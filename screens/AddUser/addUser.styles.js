@@ -38,6 +38,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     fontSize: 18,
     paddingVertical: 5,
+
+    borderStyle: "solid",
   },
   picker: {
     flexDirection: "row",
@@ -47,17 +49,24 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   pickerInput: {
-    width: "80%",
+    width: "90%",
     fontSize: 18,
     paddingVertical: 5,
     color: "black",
   },
-  options: {
+
+  androidSelect: {
     width: "100%",
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
+    elevation: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 5,
+    borderRadius: 10,
+    backgroundColor: colors.white,
+  },
+  iosSelect: {
+    width: "100%",
+    shadowColor: "#000",
     elevation: 10,
     paddingVertical: 10,
     paddingHorizontal: 5,
@@ -66,12 +75,16 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: "100%",
     zIndex: 1,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
   },
   option: {
     fontSize: 18,
     fontFamily: fonts.regular,
     paddingVertical: 5,
     paddingHorizontal: 10,
+    minHeight: 50,
   },
   submitBtn: {
     width: "100%",

@@ -1,14 +1,17 @@
 import { useState, useEffect } from "react";
+import { Platform } from "react-native";
 import axios from "axios";
 
-const useFetch = (endpoint) => {
+const useFetch = (endpoint, dataNeeded) => {
   const [data, setData] = useState([]);
+  const [isThereData, setIsThereData] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const baseUrl = Platform.OS === "android" ? "192.168.1.14" : "localhost";
 
   const options = {
     method: "GET",
-    url: `http://192.168.1.20:5005/api/${endpoint}`,
+    url: `http://${baseUrl}:5005/api/${endpoint}`,
   };
 
   const fetchData = async () => {
@@ -17,11 +20,14 @@ const useFetch = (endpoint) => {
     try {
       const res = await axios.request(options);
 
-      setData(res.data.services);
-
+      setData(res.data);
+      if (data.length === 0) {
+        setIsThereData(false);
+      }
       setIsLoading(false);
     } catch (error) {
       setError(error);
+
       if (!error.response) {
         // network error
         console.log("Error: Network Error");
@@ -35,14 +41,15 @@ const useFetch = (endpoint) => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [setData]);
 
   const refetch = () => {
     setIsLoading(true);
+
     fetchData();
   };
 
-  return { data, isLoading, error, refetch };
+  return { data, isLoading, error, refetch, isThereData };
 };
 
 export default useFetch;

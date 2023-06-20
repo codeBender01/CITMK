@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import {
   ScrollView,
   Text,
@@ -6,19 +6,39 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   View,
+  Alert,
+  Platform,
 } from "react-native";
 import styles from "./addUser.styles";
-import { AntDesign } from "@expo/vector-icons";
-import { FontAwesome5 } from "@expo/vector-icons";
+import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
+import useSignup from "../../hooks/useSignup";
+import { useStoreActions } from "easy-peasy";
 
 function AddUser({ navigation }) {
   const [isPickerPressed, setIsPickerPressed] = useState(false);
+  const [name, setName] = useState("");
+  const [organization, setOrganization] = useState("");
+  const [email, setEmail] = useState("");
   const [role, setRole] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleSetRole = useCallback((role) => {
-    setRole(role);
-    setIsPickerPressed(false);
-  });
+  const { signup, errorSignup, isLoading } = useSignup();
+  const setCondition = useStoreActions(
+    (actions) => actions.usersModel.setCondition
+  );
+
+  const handleSubmit = async () => {
+    await signup(name, organization, email, role, password).then(() => {
+      setName("");
+      setOrganization("");
+      setEmail("");
+      setRole("");
+      setPassword("");
+      Alert.alert("New user is added!");
+      setCondition(true);
+      navigation.goBack();
+    });
+  };
 
   return (
     <TouchableWithoutFeedback
@@ -45,6 +65,8 @@ function AddUser({ navigation }) {
             <TextInput
               underlineColorAndroid="transparent"
               style={styles.input}
+              onChange={({ nativeEvent }) => setName(nativeEvent.text)}
+              value={name}
             />
           </View>
           <View style={styles.inputWrapper}>
@@ -53,6 +75,8 @@ function AddUser({ navigation }) {
               underlineColorAndroid="transparent"
               style={styles.input}
               inputMode="email"
+              onChange={({ nativeEvent }) => setEmail(nativeEvent.text)}
+              value={email}
             />
           </View>
           <View style={styles.inputWrapper}>
@@ -60,6 +84,8 @@ function AddUser({ navigation }) {
             <TextInput
               underlineColorAndroid="transparent"
               style={styles.input}
+              onChange={({ nativeEvent }) => setOrganization(nativeEvent.text)}
+              value={organization}
             />
           </View>
           <View style={styles.inputWrapper}>
@@ -68,6 +94,8 @@ function AddUser({ navigation }) {
               underlineColorAndroid="transparent"
               style={styles.input}
               secureTextEntry={true}
+              onChange={({ nativeEvent }) => setPassword(nativeEvent.text)}
+              value={password}
             />
           </View>
           <View style={styles.inputWrapper}>
@@ -88,7 +116,13 @@ function AddUser({ navigation }) {
               </TouchableOpacity>
             </View>
             {isPickerPressed ? (
-              <View style={styles.options}>
+              <View
+                style={
+                  Platform.OS === "ios"
+                    ? styles.iosSelect
+                    : styles.androidSelect
+                }
+              >
                 <TouchableOpacity
                   onPress={() => {
                     setRole("user");
@@ -109,7 +143,10 @@ function AddUser({ navigation }) {
             ) : null}
           </View>
 
-          <TouchableOpacity style={styles.submitBtn}>
+          <TouchableOpacity
+            style={styles.submitBtn}
+            onPress={() => handleSubmit()}
+          >
             <Text style={styles.submitBtnText}>Сохранить</Text>
           </TouchableOpacity>
         </View>

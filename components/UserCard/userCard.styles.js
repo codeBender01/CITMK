@@ -10,6 +10,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: 10,
     position: "relative",
+    marginVertical: 5,
   },
   username: {
     fontFamily: fonts.bold,
