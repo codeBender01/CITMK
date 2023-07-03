@@ -18,9 +18,7 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/logoNew.png",
         "backgroundColor": "#ffffff"
-      },
-      "usesCleartextTraffic": "true",
-      " uses-permission android": "name"
+      }
     }
   }
 }

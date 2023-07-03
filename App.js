@@ -25,6 +25,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { StoreProvider } from "easy-peasy";
 import store from "./store";
 import { useStoreState } from "easy-peasy";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const UserStack = createStackNavigator();
 const SettingsStack = createStackNavigator();
@@ -120,6 +121,15 @@ export default function App() {
     InterReg: require("./assets/fonts/Inter-Regular.ttf"),
     InterBold: require("./assets/fonts/Inter-Bold.ttf"),
     InterMed: require("./assets/fonts/Inter-Medium.ttf"),
+  });
+
+  useEffect(() => {
+    const getData = async () => {
+      const res = await AsyncStorage.getItem("imagePath");
+      console.log(res);
+    };
+
+    getData();
   });
 
   const onLayoutRootView = useCallback(async () => {

@@ -7,7 +7,7 @@ const useFetch = (endpoint, dataNeeded) => {
   const [isThereData, setIsThereData] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const baseUrl = Platform.OS === "android" ? "192.168.1.14" : "localhost";
+  const baseUrl = Platform.OS === "android" ? "10.211.1.19" : "localhost";
 
   const options = {
     method: "GET",

@@ -26,7 +26,7 @@ function Users({ navigation }) {
     (actions) => actions.usersModel.setCondition
   );
 
-  const baseUrl = Platform.OS === "android" ? "192.168.1.14" : "localhost";
+  const baseUrl = Platform.OS === "android" ? "10.211.1.19" : "localhost";
 
   useEffect(() => {
     console.log(data);

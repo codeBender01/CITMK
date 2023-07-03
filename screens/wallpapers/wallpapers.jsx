@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import styles from "./wallpapers.styles";
 import { AntDesign } from "@expo/vector-icons";
 import Skeleton from "../../animations/skeleton/Skeleton";
+import { useStoreState, useStoreActions } from "easy-peasy";
 const bg1 = require("../../assets/images/bg1.jpg");
 const bg2 = require("../../assets/images/bg2.jpg");
 const bg3 = require("../../assets/images/bg3.jpg");
@@ -14,6 +16,12 @@ const bgImages = [bg1, bg2, bg3, bg4, bg5, bg6];
 
 function Wallpapers({ navigation }) {
   const [isLoaded, setIsLoaded] = useState(false);
+  const setSelectedPicture = useStoreActions(
+    (actions) => actions.wallModel.setSelectedPicture
+  );
+  const selectedPicture = useStoreState(
+    (state) => state.wallModel.selectedPicture
+  );
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -41,7 +49,22 @@ function Wallpapers({ navigation }) {
 
         {bgImages.map((image, index) => {
           return (
-            <TouchableOpacity key={index} style={styles.imageContainer}>
+            <TouchableOpacity
+              key={index}
+              style={styles.imageContainer}
+              onPress={async () => {
+                try {
+                  await AsyncStorage.setItem(
+                    "imagePath",
+                    JSON.stringify(image)
+                  );
+                  setSelectedPicture(image);
+                  console.log(selectedPicture);
+                } catch (err) {
+                  console.log(err);
+                }
+              }}
+            >
               <Image
                 source={image}
                 style={styles.img}
