@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import { Platform } from "react-native";
 import axios from "axios";
+import server from "../constants/server";
 
 const useFetch = (endpoint, dataNeeded) => {
   const [data, setData] = useState([]);
   const [isThereData, setIsThereData] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const baseUrl = Platform.OS === "android" ? "10.211.1.19" : "localhost";
+  const baseUrl = Platform.OS === "android" ? server : "localhost";
 
   const options = {
     method: "GET",

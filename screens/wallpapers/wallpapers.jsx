@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import styles from "./wallpapers.styles";
@@ -22,6 +22,16 @@ function Wallpapers({ navigation }) {
   const selectedPicture = useStoreState(
     (state) => state.wallModel.selectedPicture
   );
+  const setRefresh = useStoreActions((actions) => actions.wallModel.setRefresh);
+
+  useEffect(() => {
+    if (isLoaded) {
+      return;
+    }
+    setTimeout(() => {
+      setIsLoaded(true);
+    }, 3000);
+  }, [isLoaded]);
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -45,35 +55,35 @@ function Wallpapers({ navigation }) {
                 />
               );
             })
-          : null}
-
-        {bgImages.map((image, index) => {
-          return (
-            <TouchableOpacity
-              key={index}
-              style={styles.imageContainer}
-              onPress={async () => {
-                try {
-                  await AsyncStorage.setItem(
-                    "imagePath",
-                    JSON.stringify(image)
-                  );
-                  setSelectedPicture(image);
-                  console.log(selectedPicture);
-                } catch (err) {
-                  console.log(err);
-                }
-              }}
-            >
-              <Image
-                source={image}
-                style={styles.img}
-                resizeMode="cover"
-                onLoad={() => setIsLoaded(true)}
-              />
-            </TouchableOpacity>
-          );
-        })}
+          : bgImages.map((image, index) => {
+              return (
+                <TouchableOpacity
+                  key={index}
+                  style={styles.imageContainer}
+                  onPress={async () => {
+                    try {
+                      await AsyncStorage.setItem(
+                        "imagePath",
+                        JSON.stringify(image)
+                      );
+                      setSelectedPicture(image);
+                      setRefresh(true);
+                    } catch (err) {
+                      console.log(err);
+                    }
+                  }}
+                >
+                  <Image
+                    source={image}
+                    style={styles.img}
+                    resizeMode="cover"
+                    onLoad={() => {
+                      setIsLoaded(true);
+                    }}
+                  />
+                </TouchableOpacity>
+              );
+            })}
       </View>
     </View>
   );

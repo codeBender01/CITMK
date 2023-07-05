@@ -18,13 +18,11 @@ import Messages from "./screens/messages/messages";
 import Settings from "./screens/settings/settings";
 import { ImageBackground, SafeAreaView } from "react-native";
 import { DefaultTheme } from "@react-navigation/native";
-import img from "./assets/images/bg1.jpg";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
 import { createStackNavigator } from "@react-navigation/stack";
 import { StoreProvider } from "easy-peasy";
 import store from "./store";
-import { useStoreState } from "easy-peasy";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const UserStack = createStackNavigator();
@@ -122,15 +120,25 @@ export default function App() {
     InterBold: require("./assets/fonts/Inter-Bold.ttf"),
     InterMed: require("./assets/fonts/Inter-Medium.ttf"),
   });
+  const [bgImage, setBgImage] = useState(null);
+
+  const getData = async () => {
+    const res = await AsyncStorage.getItem("imagePath");
+    setBgImage(JSON.parse(res));
+  };
+  useEffect(() => {
+    getData();
+  }, []);
 
   useEffect(() => {
-    const getData = async () => {
-      const res = await AsyncStorage.getItem("imagePath");
-      console.log(res);
-    };
+    const wallInt = setInterval(() => {
+      getData();
+    }, 2000);
 
-    getData();
-  });
+    return () => {
+      clearInterval(wallInt);
+    };
+  }, []);
 
   const onLayoutRootView = useCallback(async () => {
     if (loaded) {
@@ -151,7 +159,7 @@ export default function App() {
         }}
       >
         <ImageBackground
-          source={img}
+          source={bgImage}
           resizeMode="cover"
           style={{
             flex: 1,

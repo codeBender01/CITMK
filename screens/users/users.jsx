@@ -20,7 +20,7 @@ import axios from "axios";
 
 function Users({ navigation }) {
   const { data, isLoading, error, refetch } = useFetch("user");
-  const [isRefreshing, setIsRefreshing] = useState(false);
+
   const refresh = useStoreState((state) => state.usersModel.refresh);
   const setCondition = useStoreActions(
     (actions) => actions.usersModel.setCondition
@@ -29,7 +29,6 @@ function Users({ navigation }) {
   const baseUrl = Platform.OS === "android" ? "10.211.1.19" : "localhost";
 
   useEffect(() => {
-    console.log(data);
     if (error) {
       refetch();
     }

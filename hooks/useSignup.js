@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { Platform } from "react-native";
 import useFetch from "./useFetch";
+import server from "../constants/server";
 
 const useSignup = () => {
   const [errorSignup, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(null);
-  const baseUrl = Platform.OS === "android" ? "10.211.1.19" : "localhost";
+  const baseUrl = Platform.OS === "android" ? server : "localhost";
   const { refetch, data } = useFetch("user");
 
   const signup = async (name, organization, email, role, password) => {

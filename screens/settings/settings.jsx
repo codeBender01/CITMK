@@ -1,15 +1,20 @@
 import { View, Text, TouchableOpacity } from "react-native";
+import { useEffect } from "react";
+import { useStoreState } from "easy-peasy";
 import styles from "./settings.styles";
 import {
   MaterialCommunityIcons,
   Ionicons,
   MaterialIcons,
 } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function Settings({ navigation }) {
   const handleRouting = (route) => {
     navigation.navigate(route);
   };
+  const wallRefresh = useStoreState((state) => state.wallModel.pictureRefresh);
+
   return (
     <View style={styles.container}>
       <View style={styles.profileInfo}>
