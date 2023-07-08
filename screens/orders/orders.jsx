@@ -115,7 +115,7 @@ function Orders() {
             <ActivityIndicator
               color={colors.navbarBg}
               style={styles.indicator}
-              size="large"
+              size="small"
             />
           ) : null}
 

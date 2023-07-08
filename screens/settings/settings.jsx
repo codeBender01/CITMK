@@ -1,6 +1,5 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import { useEffect } from "react";
-import { useStoreState } from "easy-peasy";
 import styles from "./settings.styles";
 import {
   MaterialCommunityIcons,
@@ -8,13 +7,12 @@ import {
   MaterialIcons,
 } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useStoreActions } from "easy-peasy";
 
 function Settings({ navigation }) {
-  const handleRouting = (route) => {
-    navigation.navigate(route);
-  };
-  const wallRefresh = useStoreState((state) => state.wallModel.pictureRefresh);
-
+  const setIsloggedIn = useStoreActions(
+    (actions) => actions.loginModel.setIsLoggedIn
+  );
   return (
     <View style={styles.container}>
       <View style={styles.profileInfo}>
@@ -56,7 +54,7 @@ function Settings({ navigation }) {
             navigation.navigate("Wallpapers");
           }}
         >
-          <View style={{ ...styles.settingBar, ...styles.settingBarNoBorder }}>
+          <View style={{ ...styles.settingBar }}>
             <View
               style={{ flexDirection: "row", alignItems: "center", gap: 8 }}
             >
@@ -66,6 +64,26 @@ function Settings({ navigation }) {
               <View>
                 <Text style={styles.settingName}>Обои</Text>
                 <Text style={styles.settingActionText}>Выбрать обои</Text>
+              </View>
+            </View>
+            <Ionicons name="arrow-forward" size={24} color="black" />
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={async () => {
+            await AsyncStorage.removeItem("token");
+            setIsloggedIn(false);
+          }}
+        >
+          <View style={{ ...styles.settingBar, ...styles.settingBarNoBorder }}>
+            <View
+              style={{ flexDirection: "row", alignItems: "center", gap: 8 }}
+            >
+              <View style={styles.settingIcon}>
+                <MaterialCommunityIcons name="logout" size={24} color="#fff" />
+              </View>
+              <View>
+                <Text style={styles.settingName}>Выйти</Text>
               </View>
             </View>
             <Ionicons name="arrow-forward" size={24} color="black" />

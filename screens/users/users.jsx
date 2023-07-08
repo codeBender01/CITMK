@@ -17,6 +17,7 @@ import useFetch from "../../hooks/useFetch";
 import NoData from "../../components/NoData/NoData";
 import { useStoreState, useStoreActions } from "easy-peasy";
 import axios from "axios";
+import server from "../../constants/server";
 
 function Users({ navigation }) {
   const { data, isLoading, error, refetch } = useFetch("user");
@@ -26,7 +27,7 @@ function Users({ navigation }) {
     (actions) => actions.usersModel.setCondition
   );
 
-  const baseUrl = Platform.OS === "android" ? "10.211.1.19" : "localhost";
+  const baseUrl = Platform.OS === "android" ? server : "localhost";
 
   useEffect(() => {
     if (error) {

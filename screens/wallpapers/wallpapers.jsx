@@ -4,7 +4,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import styles from "./wallpapers.styles";
 import { AntDesign } from "@expo/vector-icons";
 import Skeleton from "../../animations/skeleton/Skeleton";
-import { useStoreState, useStoreActions } from "easy-peasy";
+import { Snackbar } from "react-native-paper";
+import { colors } from "../../constants/theme";
 const bg1 = require("../../assets/images/bg1.jpg");
 const bg2 = require("../../assets/images/bg2.jpg");
 const bg3 = require("../../assets/images/bg3.jpg");
@@ -16,22 +17,9 @@ const bgImages = [bg1, bg2, bg3, bg4, bg5, bg6];
 
 function Wallpapers({ navigation }) {
   const [isLoaded, setIsLoaded] = useState(false);
-  const setSelectedPicture = useStoreActions(
-    (actions) => actions.wallModel.setSelectedPicture
-  );
-  const selectedPicture = useStoreState(
-    (state) => state.wallModel.selectedPicture
-  );
-  const setRefresh = useStoreActions((actions) => actions.wallModel.setRefresh);
+  const [snackVisible, setSnackVisible] = useState(false);
 
-  useEffect(() => {
-    if (isLoaded) {
-      return;
-    }
-    setTimeout(() => {
-      setIsLoaded(true);
-    }, 3000);
-  }, [isLoaded]);
+  useEffect(() => {}, [isLoaded]);
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -44,7 +32,7 @@ function Wallpapers({ navigation }) {
       <Text style={styles.wallpaperText}>Обои</Text>
 
       <View style={styles.images}>
-        {!isLoaded
+        {/* {!isLoaded
           ? bgImages.map((_, i) => {
               return (
                 <Skeleton
@@ -55,36 +43,54 @@ function Wallpapers({ navigation }) {
                 />
               );
             })
-          : bgImages.map((image, index) => {
-              return (
-                <TouchableOpacity
-                  key={index}
-                  style={styles.imageContainer}
-                  onPress={async () => {
-                    try {
-                      await AsyncStorage.setItem(
-                        "imagePath",
-                        JSON.stringify(image)
-                      );
-                      setSelectedPicture(image);
-                      setRefresh(true);
-                    } catch (err) {
-                      console.log(err);
-                    }
-                  }}
-                >
-                  <Image
-                    source={image}
-                    style={styles.img}
-                    resizeMode="cover"
-                    onLoad={() => {
-                      setIsLoaded(true);
-                    }}
-                  />
-                </TouchableOpacity>
-              );
-            })}
+          : null} */}
+
+        {bgImages.map((image, index) => {
+          return (
+            <TouchableOpacity
+              key={index}
+              style={styles.imageContainer}
+              onPress={async () => {
+                try {
+                  await AsyncStorage.setItem(
+                    "imagePath",
+                    JSON.stringify(image)
+                  );
+
+                  setSnackVisible(true);
+                } catch (err) {
+                  console.log(err);
+                }
+              }}
+            >
+              <Image
+                source={image}
+                style={styles.img}
+                resizeMode="cover"
+                onLoad={() => {
+                  setIsLoaded(true);
+                }}
+              />
+            </TouchableOpacity>
+          );
+        })}
       </View>
+      <Snackbar
+        visible={snackVisible}
+        duration={2000}
+        onDismiss={() => {
+          setSnackVisible(false);
+        }}
+        wrapperStyle={{
+          bottom: 0,
+          left: 0,
+        }}
+        style={{
+          backgroundColor: colors.navbarBg,
+        }}
+      >
+        Обои были изменены!
+      </Snackbar>
     </View>
   );
 }

@@ -10,6 +10,61 @@ const styles = StyleSheet.create({
     marginHorizontal: "auto",
     position: "relative",
   },
+  datePickButton: {
+    backgroundColor: colors.navbarBg,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 10,
+    textAlign: "center",
+    width: "50%",
+    alignSelf: "center",
+    alignItems: "center",
+  },
+  datePickText: {
+    color: colors.white,
+    fontSize: 16,
+    fontWeight: 700,
+  },
+  analyticsBox: {
+    width: "100%",
+    backgroundColor: colors.navbarBg,
+    borderRadius: 10,
+    marginVertical: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+  },
+  anTitle: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 10,
+    textAlign: "center",
+  },
+  anBoxText: {
+    color: colors.white,
+    fontSize: 25,
+    fontWeight: 700,
+  },
+  tableRow: {
+    flexDirection: "row",
+    borderBottomColor: colors.white,
+    borderBottomWidth: 1,
+    paddingHorizontal: 3,
+    paddingVertical: 5,
+    width: "100%",
+    justifyContent: "space-between",
+  },
+  tableRowTitleText: {
+    fontSize: 18,
+    fontWeight: 500,
+    color: colors.white,
+  },
+
+  tableRowDataText: {
+    fontSize: 18,
+    fontWeight: 500,
+    color: colors.white,
+  },
 });
 
 export default styles;

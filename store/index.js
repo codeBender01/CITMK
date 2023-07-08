@@ -1,11 +1,11 @@
 import { createStore } from "easy-peasy";
 
 import usersModel from "./users/users";
-import wallModel from "./wallpaper/wallpaper";
+import loginModel from "./login";
 
 const store = createStore({
   usersModel,
-  wallModel,
+  loginModel,
 });
 
 export default store;

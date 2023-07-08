@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
     gap: 10,
     justifyContent: "center",
     alignItems: "center",
+    marginBottom: 20,
   },
   imageContainer: {
     width: "45%",

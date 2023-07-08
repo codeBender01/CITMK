@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
 
   noDataText: {
     fontSize: 32,
-    color: colors.mainFont,
+    color: colors.white,
     fontFamily: fonts.bold,
   },
 });

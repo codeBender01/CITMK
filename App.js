@@ -6,6 +6,8 @@ import {
   Foundation,
   MaterialCommunityIcons,
   Ionicons,
+  MaterialIcons,
+  Entypo,
 } from "@expo/vector-icons";
 import { colors } from "./constants/theme";
 import Users from "./screens/users/users";
@@ -16,15 +18,18 @@ import Analytics from "./screens/analytics/analytics";
 import Orders from "./screens/orders/orders";
 import Messages from "./screens/messages/messages";
 import Settings from "./screens/settings/settings";
+import Login from "./screens/login/login";
+import Other from "./screens/userScreens/other/other";
+import ServiceList from "./screens/userScreens/serviceList/serviceList";
 import { ImageBackground, SafeAreaView } from "react-native";
 import { DefaultTheme } from "@react-navigation/native";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
 import { createStackNavigator } from "@react-navigation/stack";
-import { StoreProvider } from "easy-peasy";
-import store from "./store";
+import { useStoreState } from "easy-peasy";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+const LoginStack = createStackNavigator();
 const UserStack = createStackNavigator();
 const SettingsStack = createStackNavigator();
 
@@ -37,7 +42,7 @@ const MyTheme = {
   },
 };
 
-const tabs = [
+const adminTabs = [
   {
     name: "Пользователи",
     component: UserScreen,
@@ -79,7 +84,37 @@ const tabs = [
   },
 ];
 
+const userTabs = [
+  {
+    name: "Услуги",
+    component: ServiceList,
+    tabBarIcon: ({ color, size }) => (
+      <MaterialIcons name="playlist-add-check" size={size} color={color} />
+    ),
+  },
+  {
+    name: "Прочее",
+    component: Other,
+    tabBarIcon: ({ color, size }) => (
+      <Entypo name="dots-three-horizontal" size={size} color={color} />
+    ),
+  },
+];
+
 const Tab = createBottomTabNavigator();
+
+function LoginScreen() {
+  return (
+    <LoginStack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+      initialRouteName="Войти"
+    >
+      <LoginStack.Screen name="login">{() => <Login />}</LoginStack.Screen>
+    </LoginStack.Navigator>
+  );
+}
 
 function UserScreen() {
   return (
@@ -121,6 +156,8 @@ export default function App() {
     InterMed: require("./assets/fonts/Inter-Medium.ttf"),
   });
   const [bgImage, setBgImage] = useState(null);
+  const isLoggedIn = useStoreState((state) => state.loginModel.isLoggedIn);
+  const role = useStoreState((state) => state.loginModel.role);
 
   const getData = async () => {
     const res = await AsyncStorage.getItem("imagePath");
@@ -151,23 +188,23 @@ export default function App() {
   }
 
   return (
-    <StoreProvider store={store}>
-      <SafeAreaView
+    <SafeAreaView
+      style={{
+        width: "100%",
+        height: "100%",
+      }}
+    >
+      <ImageBackground
+        source={bgImage}
+        resizeMode="cover"
         style={{
-          width: "100%",
-          height: "100%",
+          flex: 1,
         }}
+        onLayout={onLayoutRootView}
+        transition={false}
       >
-        <ImageBackground
-          source={bgImage}
-          resizeMode="cover"
-          style={{
-            flex: 1,
-          }}
-          onLayout={onLayoutRootView}
-          transition={false}
-        >
-          <NavigationContainer theme={MyTheme}>
+        <NavigationContainer theme={MyTheme}>
+          {isLoggedIn ? (
             <Tab.Navigator
               screenOptions={{
                 tabBarStyle: {
@@ -179,29 +216,49 @@ export default function App() {
                 tabBarInactiveTintColor: "#fff",
                 gestureEnabled: true,
               }}
-              initialRouteName="Заявки"
+              initialRouteName={role === "admin" ? "Заявки" : "Услуги"}
             >
-              {tabs.map((tab) => {
-                return (
-                  <Tab.Screen
-                    key={tab.name}
-                    name={tab.name}
-                    component={tab.component}
-                    options={{
-                      tabBarIcon: tab.tabBarIcon,
-                      headerShown: false,
-                      tabBarActiveBackgroundColor: "rgba(0, 0, 0, 0.4)",
-                      tabBarItemStyle: {
-                        paddingVertical: 5,
-                      },
-                    }}
-                  />
-                );
-              })}
+              {role === "admin"
+                ? adminTabs.map((tab) => {
+                    return (
+                      <Tab.Screen
+                        key={tab.name}
+                        name={tab.name}
+                        component={tab.component}
+                        options={{
+                          tabBarIcon: tab.tabBarIcon,
+                          headerShown: false,
+                          tabBarActiveBackgroundColor: "rgba(0, 0, 0, 0.4)",
+                          tabBarItemStyle: {
+                            paddingVertical: 5,
+                          },
+                        }}
+                      />
+                    );
+                  })
+                : userTabs.map((tab) => {
+                    return (
+                      <Tab.Screen
+                        key={tab.name}
+                        name={tab.name}
+                        component={tab.component}
+                        options={{
+                          tabBarIcon: tab.tabBarIcon,
+                          headerShown: false,
+                          tabBarActiveBackgroundColor: "rgba(0, 0, 0, 0.4)",
+                          tabBarItemStyle: {
+                            paddingVertical: 5,
+                          },
+                        }}
+                      />
+                    );
+                  })}
             </Tab.Navigator>
-          </NavigationContainer>
-        </ImageBackground>
-      </SafeAreaView>
-    </StoreProvider>
+          ) : (
+            <LoginScreen />
+          )}
+        </NavigationContainer>
+      </ImageBackground>
+    </SafeAreaView>
   );
 }
