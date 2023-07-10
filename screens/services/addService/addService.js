@@ -74,7 +74,6 @@ function AddService({ navigation }) {
         setDesc("");
         setSnackVisible(true);
         setSnackText("Услуга успешно добавлена");
-        navigation.navigate("SettingsScreen");
       })
       .catch((err) => {
         setSnackVisible(true);

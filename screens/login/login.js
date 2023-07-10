@@ -176,8 +176,13 @@ function Login({ navigation }) {
               })
               .then(async (res) => {
                 setIsLoggedIn(true);
+                console.log(res);
                 await AsyncStorage.setItem("token", res.data.token);
-                if (res.data.user === "admin") {
+                await AsyncStorage.setItem(
+                  "user",
+                  JSON.stringify(res.data.user)
+                );
+                if (res.data.user.role === "admin") {
                   setTabs(adminTabs);
                 } else {
                   setTabs(userTabs);
