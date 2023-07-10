@@ -13,6 +13,7 @@ function Settings({ navigation }) {
   const setIsloggedIn = useStoreActions(
     (actions) => actions.loginModel.setIsLoggedIn
   );
+  const setTabs = useStoreActions((actions) => actions.loginModel.setTabs);
   return (
     <View style={styles.container}>
       <View style={styles.profileInfo}>
@@ -73,6 +74,7 @@ function Settings({ navigation }) {
           onPress={async () => {
             await AsyncStorage.removeItem("token");
             setIsloggedIn(false);
+            setTabs([]);
           }}
         >
           <View style={{ ...styles.settingBar, ...styles.settingBarNoBorder }}>
