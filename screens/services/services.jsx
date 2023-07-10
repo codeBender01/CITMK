@@ -18,7 +18,12 @@ function Services({ navigation }) {
       <Text style={styles.editServicesText}>Редактировать услуги</Text>
       <View>
         <ServiceCard />
-        <TouchableOpacity style={styles.addService}>
+        <TouchableOpacity
+          style={styles.addService}
+          onPress={() => {
+            navigation.navigate("AddService");
+          }}
+        >
           <Text style={styles.addServiceText}>Добавить новую</Text>
         </TouchableOpacity>
       </View>

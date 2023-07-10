@@ -48,11 +48,19 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.greenAccept,
     borderBottomWidth: 1,
   },
+
+  pickerBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    width: "100%",
+  },
   pickerInput: {
-    width: "90%",
+    flexGrow: 1,
     fontSize: 18,
     paddingVertical: 5,
     color: "black",
+    width: "100%",
   },
 
   androidSelect: {

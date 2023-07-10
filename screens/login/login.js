@@ -25,6 +25,7 @@ import Users from "../users/users";
 import AddUser from "../addUser/addUser";
 import Wallpapers from "../wallpapers/wallpapers";
 import Services from "../services/services";
+import AddService from "../services/addService/addService";
 import Analytics from "../analytics/analytics";
 import Orders from "../orders/orders";
 import Messages from "../messages/messages";
@@ -124,6 +125,7 @@ function SettingsScreen() {
       <SettingsStack.Screen name="SettingsScreen" component={Settings} />
       <SettingsStack.Screen name="Services" component={Services} />
       <SettingsStack.Screen name="Wallpapers" component={Wallpapers} />
+      <SettingsStack.Screen name="AddService" component={AddService} />
     </SettingsStack.Navigator>
   );
 }

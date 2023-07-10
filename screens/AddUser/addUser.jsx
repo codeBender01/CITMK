@@ -101,17 +101,18 @@ function AddUser({ navigation }) {
           <View style={styles.inputWrapper}>
             <Text style={styles.label}>Права пользователя</Text>
             <View style={styles.picker}>
-              <TextInput
-                editable={false}
-                style={styles.pickerInput}
-                value={role}
-              />
               <TouchableOpacity
                 onPress={() => {
                   setIsPickerPressed(!isPickerPressed);
                 }}
                 activeOpacity={1}
+                style={styles.pickerBtn}
               >
+                <TextInput
+                  editable={false}
+                  style={styles.pickerInput}
+                  value={role}
+                />
                 <FontAwesome5 name="caret-down" size={24} color="#868686" />
               </TouchableOpacity>
             </View>

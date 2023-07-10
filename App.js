@@ -47,7 +47,6 @@ export default function App() {
   });
   const [bgImage, setBgImage] = useState(null);
   const isLoggedIn = useStoreState((state) => state.loginModel.isLoggedIn);
-  const role = useStoreState((state) => state.loginModel.role);
   const tabs = useStoreState((state) => state.loginModel.tabs);
 
   const getData = async () => {
@@ -57,9 +56,7 @@ export default function App() {
 
   useEffect(() => {
     getData();
-
-    console.log(tabs);
-  }, [tabs]);
+  }, []);
 
   useEffect(() => {
     const wallInt = setInterval(() => {
