@@ -17,6 +17,7 @@ import { colors } from "../../../constants/theme";
 import server from "../../../constants/server";
 import axios from "axios";
 import { Snackbar } from "react-native-paper";
+import { useStoreActions } from "easy-peasy";
 
 const services = [
   {
@@ -45,6 +46,10 @@ function AddService({ navigation }) {
   const [snackVisible, setSnackVisible] = useState(false);
   const [snackText, setSnackText] = useState("");
 
+  const setRefresh = useStoreActions(
+    (actions) => actions.servicesModel.setServicesRefresh
+  );
+
   const submitUrl = `http://${
     Platform.OS === "android" ? server : "localhost"
   }:5005/api/service`;
@@ -64,10 +69,12 @@ function AddService({ navigation }) {
     await axios
       .post(submitUrl, services)
       .then((res) => {
+        setRefresh(true);
         setService("");
         setDesc("");
         setSnackVisible(true);
         setSnackText("Услуга успешно добавлена");
+        navigation.navigate("SettingsScreen");
       })
       .catch((err) => {
         setSnackVisible(true);
@@ -82,6 +89,7 @@ function AddService({ navigation }) {
         <View style={styles.input}>
           <TextInput
             placeholder="Описание услуги"
+            inputMode="text"
             style={{
               ...styles.textInput,
               borderWidth: 1,
