@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   Platform,
+  ScrollView,
 } from "react-native";
 import {
   Feather,
@@ -145,7 +146,12 @@ function Login({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Image source={logo} alt="Logo" resizeMode="cover" />
+      <Image
+        source={logo}
+        alt="Logo"
+        resizeMode="contain"
+        style={{ width: "75%", height: 80 }}
+      />
       <View style={styles.loginField}>
         <Text style={styles.text}>Введите данные</Text>
         <View style={styles.inputField}>
@@ -176,7 +182,7 @@ function Login({ navigation }) {
               })
               .then(async (res) => {
                 setIsLoggedIn(true);
-                console.log(res);
+
                 await AsyncStorage.setItem("token", res.data.token);
                 await AsyncStorage.setItem(
                   "user",

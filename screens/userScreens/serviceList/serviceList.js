@@ -15,7 +15,6 @@ function ServiceList() {
     const storage = async () => {
       const res = await AsyncStorage.getItem("user");
       const data = JSON.parse(res);
-      console.log(data.name);
 
       setUsername(data.name);
       setOrg(data.organization);
