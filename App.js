@@ -12,6 +12,8 @@ import { useFonts } from "expo-font";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useStoreState } from "easy-peasy";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import server from "./constants/server";
 
 const LoginStack = createStackNavigator();
 
@@ -46,6 +48,7 @@ export default function App() {
     InterMed: require("./assets/fonts/Inter-Medium.ttf"),
   });
   const [bgImage, setBgImage] = useState(null);
+  const [unreadMessageCount, setUnreadMessageCount] = useState(null);
   const isLoggedIn = useStoreState((state) => state.loginModel.isLoggedIn);
   const tabs = useStoreState((state) => state.loginModel.tabs);
 
@@ -55,6 +58,13 @@ export default function App() {
   };
 
   useEffect(() => {
+    const fetchMessages = async () => {
+      await axios.get(`http://${server}:5005/api/message/read`).then((res) => {
+        setUnreadMessageCount(res.data.result);
+      });
+    };
+
+    fetchMessages();
     getData();
   }, []);
 
@@ -122,6 +132,10 @@ export default function App() {
                       tabBarItemStyle: {
                         paddingVertical: 5,
                       },
+                      tabBarBadge:
+                        tab.tabBarBadge && unreadMessageCount !== 0
+                          ? unreadMessageCount
+                          : null,
                     }}
                   />
                 );

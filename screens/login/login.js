@@ -70,6 +70,7 @@ const adminTabs = [
         color={color}
       />
     ),
+    tabBarBadge: true,
   },
   {
     name: "Настройки",

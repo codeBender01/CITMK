@@ -9,9 +9,19 @@ import {
 } from "@expo/vector-icons";
 import { colors } from "../../constants/theme";
 import FadeInView from "../../animations/FadeInView";
+import axios from "axios";
+import server from "../../constants/server";
+import { useStoreActions } from "easy-peasy";
 
-function MessageCard() {
+function MessageCard(props) {
   const [isIconPressed, setIsIconPressed] = useState(false);
+  const { email, name, message, phoneNumber, read, id } = props;
+  const [isRead, setIsRead] = useState(read);
+
+  const setRefresh = useStoreActions(
+    (actions) => actions.messagesModel.setIsMessagesRefresh
+  );
+
   return (
     <View style={styles.container}>
       <View style={styles.upper}>
@@ -19,14 +29,22 @@ function MessageCard() {
           <Text style={styles.profileInitials}>U</Text>
         </View>
         <View style={styles.nameMessage}>
-          <Text style={styles.name}>user</Text>
-          <Text style={styles.message}>message</Text>
+          <Text style={styles.name}>{name}</Text>
+          <Text style={styles.message}>{message}</Text>
         </View>
+
+        {!isRead ? <View style={styles.notif}></View> : null}
       </View>
       <View style={isIconPressed ? styles.arrowUp : styles.arrowDown}>
         <TouchableOpacity
-          onPress={() => {
+          onPress={async () => {
             setIsIconPressed(!isIconPressed);
+            await axios
+              .patch(`http://${server}:5005/api/message/read/${id}`, {
+                read: true,
+              })
+              .then((res) => {});
+            setIsRead(true);
           }}
         >
           <MaterialIcons
@@ -40,7 +58,7 @@ function MessageCard() {
         <FadeInView>
           <View style={styles.info}>
             <Feather name="phone-call" size={24} color="black" />
-            <Text style={styles.infoText}>+99353562365</Text>
+            <Text style={styles.infoText}>+{phoneNumber}</Text>
           </View>
           <View style={styles.info}>
             <MaterialCommunityIcons
@@ -48,11 +66,11 @@ function MessageCard() {
               size={24}
               color="black"
             />
-            <Text style={styles.infoText}>condom@gmail.com</Text>
+            <Text style={styles.infoText}>{email}</Text>
           </View>
           <View style={styles.info}>
             <AntDesign name="message1" size={24} color="black" />
-            <Text style={styles.infoText}>hfshdgfhgsfs</Text>
+            <Text style={styles.infoText}>{message}</Text>
           </View>
           <View style={styles.actionBtns}>
             <TouchableOpacity style={{ ...styles.btn, ...styles.btnEdit }}>
@@ -67,7 +85,17 @@ function MessageCard() {
                 Редактировать
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={{ ...styles.btn, ...styles.btnDelete }}>
+            <TouchableOpacity
+              style={{ ...styles.btn, ...styles.btnDelete }}
+              onPress={async () => {
+                setRefresh(true);
+                await axios
+                  .delete(`http://${server}:5005/api/message/${id}`)
+                  .then((res) => {
+                    console.log(res);
+                  });
+              }}
+            >
               <Text
                 style={{
                   textAlign: "center",

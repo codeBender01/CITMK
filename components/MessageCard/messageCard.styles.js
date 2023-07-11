@@ -97,6 +97,12 @@ const styles = StyleSheet.create({
   btnDelete: {
     backgroundColor: colors.redDelete,
   },
+  notif: {
+    backgroundColor: colors.greenAccept,
+    width: 10,
+    height: 10,
+    borderRadius: 50,
+  },
 });
 
 export default styles;
