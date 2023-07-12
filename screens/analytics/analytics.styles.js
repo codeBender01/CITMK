@@ -1,11 +1,12 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 import { colors } from "../../constants/theme";
 
 const styles = StyleSheet.create({
   container: {
     width: "100%",
     height: "100%",
-    paddingVertical: 50,
+    height: Dimensions.get("window").height,
+    marginTop: 30,
     paddingHorizontal: 25,
     marginHorizontal: "auto",
     position: "relative",
@@ -32,6 +33,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     paddingHorizontal: 10,
     paddingVertical: 10,
+    marginTop: 10,
   },
   anTitle: {
     flexDirection: "row",

@@ -1,5 +1,12 @@
 import { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, FlatList, Platform } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  FlatList,
+  Platform,
+  ScrollView,
+} from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import ServiceCard from "../../components/ServiceCard/ServiceCard";
 
@@ -46,7 +53,7 @@ function Services({ navigation }) {
         <AntDesign name="arrowleft" size={24} color="black" />
       </TouchableOpacity>
       <Text style={styles.editServicesText}>Редактировать услуги</Text>
-      <View>
+      <View style={{ flex: 1 }}>
         <FlatList
           data={data.services}
           renderItem={(ser) => (

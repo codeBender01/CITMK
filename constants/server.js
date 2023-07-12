@@ -1,3 +1,3 @@
-const server = "172.31.160.1";
+const server = "192.168.11.220";
 
 export default server;

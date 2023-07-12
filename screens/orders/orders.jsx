@@ -5,15 +5,15 @@ import {
   FlatList,
   TouchableOpacity,
   ActivityIndicator,
-  Paltform,
+  RefreshControl,
 } from "react-native";
 import OrderCard from "../../components/OrderCard/OrderCard";
 import styles from "./orders.styles";
 import { colors } from "../../constants/theme";
 import axios from "axios";
-import NoData from "../../components/NoData/NoData";
 import server from "../../constants/server";
 import { useStoreActions, useStoreState } from "easy-peasy";
+import useFetch from "../../hooks/useFetch";
 
 const orderTabs = ["Новые заявки", "В работе", "Выполненные"];
 
@@ -24,7 +24,6 @@ function Orders() {
   const [statusColor, setStatusColor] = useState(colors.greenAccept);
   const [buttonText, setButtonText] = useState(["Принять", "Отказаться"]);
   const [url, setUrl] = useState(`http://${server}:5005/api/service/sended`);
-  const [sent, setSent] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const refresh = useStoreState((state) => state.ordersModel.isOrdersRefresh);
@@ -39,7 +38,6 @@ function Orders() {
       await axios
         .get(`http://${server}:5005/api/service/sended/all`)
         .then((res) => {
-          setSent(res.data.services);
           setData(res.data.services);
           setIsLoading(false);
         })
@@ -52,11 +50,45 @@ function Orders() {
   }, []);
 
   useEffect(() => {
-    if (refresh) {
+    const fetchAll = async () => {
+      if (refresh) {
+        if (status === "Новая") {
+          await axios
+            .get(`http://${server}:5005/api/service/sended/all`)
+            .then((res) => {
+              setData(res.data.services);
+              setIsLoading(false);
+            })
+            .catch((err) => {
+              console.log(err.message);
+            });
+        } else if (status === "В процессе") {
+          await axios
+            .get(`http://${server}:5005/api/service/accepted/get`)
+            .then((res) => {
+              setData(res.data.acceptedServices);
+            })
+            .catch((err) => {
+              console.log(err.message);
+            });
+        } else {
+          await axios
+            .get(`http://${server}:5005/api/service/done/get`)
+            .then((res) => {
+              setData(res.data.serviceDone);
+            })
+            .catch((err) => {
+              console.log(err.message);
+            });
+        }
+      }
+
       setTimeout(() => {
         setRefresh(false);
       }, 2000);
-    }
+    };
+
+    fetchAll();
   }, [refresh]);
 
   return (
@@ -67,8 +99,17 @@ function Orders() {
             styles.tab,
             activeTab === "Новые заявки" ? styles.activeTab : null,
           ]}
-          onPress={() => {
-            setData(sent);
+          onPress={async () => {
+            await axios
+              .get(`http://${server}:5005/api/service/sended/all`)
+              .then((res) => {
+                setData(res.data.services);
+                setIsLoading(false);
+              })
+              .catch((err) => {
+                console.log(err.message);
+              });
+
             setUrl(`http://${server}:5005/api/service/sended`);
             setActiveTab("Новые заявки");
             setStatusColor(colors.greenAccept);
@@ -143,6 +184,13 @@ function Orders() {
               url={url}
             />
           )}
+          refreshControl={
+            <RefreshControl
+              colors={[colors.greenAccept]}
+              refreshing={refresh}
+              onRefresh={async () => {}}
+            />
+          }
         />
       )}
     </View>

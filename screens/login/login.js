@@ -6,7 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   Platform,
-  ScrollView,
+  Keyboard,
 } from "react-native";
 import {
   Feather,
@@ -34,6 +34,8 @@ import Settings from "../settings/settings";
 import Other from "../userScreens/other/other";
 import ServiceList from "../userScreens/serviceList/serviceList";
 import { createStackNavigator } from "@react-navigation/stack";
+import { colors } from "../../constants/theme";
+import { Snackbar } from "react-native-paper";
 
 const UserStack = createStackNavigator();
 const SettingsStack = createStackNavigator();
@@ -135,10 +137,10 @@ function SettingsScreen() {
 function Login({ navigation }) {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
+  const [isError, setIsError] = useState(false);
+  const [snackVisible, setSnackVisible] = useState(false);
 
-  const endPoint = `http://${
-    Platform.OS === "android" ? server : "localhost"
-  }:5005/api/user/login`;
+  const endPoint = `http://${server}:5005/api/user/login`;
 
   const setIsLoggedIn = useStoreActions(
     (actions) => actions.loginModel.setIsLoggedIn
@@ -158,18 +160,26 @@ function Login({ navigation }) {
         <View style={styles.inputField}>
           <Text style={styles.inputText}>Имя пользователя</Text>
           <TextInput
-            style={styles.input}
+            style={isError ? styles.loginError : styles.input}
             value={name}
-            onChange={({ nativeEvent }) => setName(nativeEvent.text)}
+            onChange={({ nativeEvent }) => {
+              setName(nativeEvent.text);
+              setIsError(false);
+            }}
+            autoCapitalize="none"
           />
         </View>
         <View style={styles.inputField}>
           <Text style={styles.inputText}>Пароль</Text>
           <TextInput
-            style={styles.input}
+            style={isError ? styles.loginError : styles.input}
             secureTextEntry={true}
             value={password}
-            onChange={({ nativeEvent }) => setPassword(nativeEvent.text)}
+            onChange={({ nativeEvent }) => {
+              setPassword(nativeEvent.text);
+              setIsError(false);
+            }}
+            autoCapitalize="none"
           />
         </View>
 
@@ -196,13 +206,32 @@ function Login({ navigation }) {
                 }
               })
               .catch((err) => {
-                console.log(err.message);
+                setSnackVisible(true);
+                setIsError(true);
+                setName("");
+                setPassword("");
               });
           }}
         >
           <Text style={styles.submitBtnText}>Войти</Text>
         </TouchableOpacity>
       </View>
+      <Snackbar
+        visible={snackVisible}
+        duration={2000}
+        onDismiss={() => {
+          setSnackVisible(false);
+        }}
+        wrapperStyle={{
+          top: "25%",
+          left: 20,
+        }}
+        style={{
+          backgroundColor: colors.redDelete,
+        }}
+      >
+        Данные введены неправильно
+      </Snackbar>
     </View>
   );
 }

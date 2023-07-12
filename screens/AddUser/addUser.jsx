@@ -67,6 +67,7 @@ function AddUser({ navigation }) {
               style={styles.input}
               onChange={({ nativeEvent }) => setName(nativeEvent.text)}
               value={name}
+              autoCapitalize="none"
             />
           </View>
           <View style={styles.inputWrapper}>
@@ -77,6 +78,7 @@ function AddUser({ navigation }) {
               inputMode="email"
               onChange={({ nativeEvent }) => setEmail(nativeEvent.text)}
               value={email}
+              autoCapitalize="none"
             />
           </View>
           <View style={styles.inputWrapper}>
@@ -86,6 +88,7 @@ function AddUser({ navigation }) {
               style={styles.input}
               onChange={({ nativeEvent }) => setOrganization(nativeEvent.text)}
               value={organization}
+              autoCapitalize="none"
             />
           </View>
           <View style={styles.inputWrapper}>
@@ -96,6 +99,7 @@ function AddUser({ navigation }) {
               secureTextEntry={true}
               onChange={({ nativeEvent }) => setPassword(nativeEvent.text)}
               value={password}
+              autoCapitalize="none"
             />
           </View>
           <View style={styles.inputWrapper}>

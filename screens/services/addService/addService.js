@@ -5,6 +5,9 @@ import {
   TextInput,
   Platform,
   TouchableOpacity,
+  TouchableWithoutFeedback,
+  Keyboard,
+  ScrollView,
 } from "react-native";
 import styles from "./addSer.styles";
 import {
@@ -79,100 +82,109 @@ function AddService({ navigation }) {
         setSnackVisible(true);
         setSnackText("Ошибка! Попробуйте снова");
       });
+
+    setTimeout(() => {
+      navigation.navigate("SettingsScreen");
+    }, 2000);
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Создать Заявку</Text>
-      <View style={styles.form}>
-        <View style={styles.input}>
-          <TextInput
-            placeholder="Описание услуги"
-            inputMode="text"
-            style={{
-              ...styles.textInput,
-              borderWidth: 1,
-              borderColor: colors.grayFinished,
-              paddingHorizontal: 10,
-              paddingVertical: 5,
-            }}
-            onFocus={() => setIsPickerPressed(false)}
-            onChange={({ nativeEvent }) => setDesc(nativeEvent.text)}
-            value={desc}
-          />
-        </View>
-        <View style={{ ...styles.dropdown }}>
-          <Text style={styles.label}>Тип услуги</Text>
-          <View style={styles.picker}>
-            <TouchableOpacity
-              onPress={() => {
-                setIsPickerPressed(!isPickerPressed);
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <View style={styles.container}>
+        <Text style={styles.title}>Создать Заявку</Text>
+        <View style={styles.form}>
+          <View style={styles.input}>
+            <TextInput
+              placeholder="Описание услуги"
+              inputMode="text"
+              style={{
+                ...styles.textInput,
+                borderWidth: 1,
+                borderColor: colors.grayFinished,
+                paddingHorizontal: 10,
+                paddingVertical: 5,
               }}
-              activeOpacity={1}
-              style={styles.pickerBtn}
-            >
-              <TextInput
-                editable={false}
-                style={styles.textInput}
-                value={service}
-                showSoftInputOnFocus={false}
-              />
-              <FontAwesome name="caret-down" size={24} color="#868686" />
-            </TouchableOpacity>
+              onFocus={() => setIsPickerPressed(false)}
+              onChange={({ nativeEvent }) => setDesc(nativeEvent.text)}
+              value={desc}
+            />
           </View>
-          {isPickerPressed ? (
-            <View
-              style={
-                Platform.OS === "ios" ? styles.iosSelect : styles.androidSelect
-              }
-            >
-              {services.map((ser) => {
-                return (
-                  <TouchableOpacity
-                    onPress={() => {
-                      setService(ser.name);
-                      setIsPickerPressed(false);
-                    }}
-                    key={ser.name}
-                    style={ser.last ? styles.last : styles.select}
-                  >
-                    {ser.icon}
-                    <Text style={styles.option}>{ser.name}</Text>
-                  </TouchableOpacity>
-                );
-              })}
+          <View style={{ ...styles.dropdown }}>
+            <Text style={styles.label}>Тип услуги</Text>
+            <View style={styles.picker}>
+              <TouchableOpacity
+                onPress={() => {
+                  setIsPickerPressed(!isPickerPressed);
+                  Keyboard.dismiss();
+                }}
+                activeOpacity={1}
+                style={styles.pickerBtn}
+              >
+                <TextInput
+                  editable={false}
+                  style={styles.textInput}
+                  value={service}
+                  showSoftInputOnFocus={false}
+                />
+                <FontAwesome name="caret-down" size={24} color="#868686" />
+              </TouchableOpacity>
             </View>
-          ) : null}
+            {isPickerPressed ? (
+              <View
+                style={
+                  Platform.OS === "ios"
+                    ? styles.iosSelect
+                    : styles.androidSelect
+                }
+              >
+                {services.map((ser) => {
+                  return (
+                    <TouchableOpacity
+                      onPress={() => {
+                        setService(ser.name);
+                        setIsPickerPressed(false);
+                      }}
+                      key={ser.name}
+                      style={ser.last ? styles.last : styles.select}
+                    >
+                      {ser.icon}
+                      <Text style={styles.option}>{ser.name}</Text>
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
+            ) : null}
+          </View>
         </View>
-      </View>
-      <View style={styles.actionBtns}>
-        <TouchableOpacity style={styles.submitBtn} onPress={handleSubmit}>
-          <Text style={styles.btnText}>Сохранить</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.submitBtn}
-          onPress={() => navigation.navigate("SettingsScreen")}
+        <View style={styles.actionBtns}>
+          <TouchableOpacity style={styles.submitBtn} onPress={handleSubmit}>
+            <Text style={styles.btnText}>Сохранить</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.submitBtn}
+            onPress={() => navigation.navigate("SettingsScreen")}
+          >
+            <Text style={styles.btnText}>Отменить</Text>
+          </TouchableOpacity>
+        </View>
+        <Snackbar
+          visible={snackVisible}
+          duration={2000}
+          onDismiss={() => {
+            setSnackVisible(false);
+          }}
+          wrapperStyle={{
+            bottom: 0,
+            left: 0,
+          }}
+          style={{
+            backgroundColor: colors.navbarBg,
+          }}
         >
-          <Text style={styles.btnText}>Отменить</Text>
-        </TouchableOpacity>
+          {snackText}
+        </Snackbar>
       </View>
-      <Snackbar
-        visible={snackVisible}
-        duration={2000}
-        onDismiss={() => {
-          setSnackVisible(false);
-        }}
-        wrapperStyle={{
-          bottom: 0,
-          left: 0,
-        }}
-        style={{
-          backgroundColor: colors.navbarBg,
-        }}
-      >
-        {snackText}
-      </Snackbar>
-    </View>
+    </TouchableWithoutFeedback>
   );
 }
 

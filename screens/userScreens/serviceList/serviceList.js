@@ -5,11 +5,14 @@ import useFetch from "../../../hooks/useFetch";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import server from "../../../constants/server";
+import { colors } from "../../../constants/theme";
+import { Snackbar } from "react-native-paper";
 
 function ServiceList() {
   const { data, isLoading, refetch } = useFetch("service");
   const [username, setUsername] = useState("");
   const [org, setOrg] = useState("");
+  const [snackVisible, setSnackVisible] = useState(false);
 
   useEffect(() => {
     const storage = async () => {
@@ -54,6 +57,7 @@ function ServiceList() {
                     )
                     .then((res) => {
                       console.log(res);
+                      setSnackVisible(true);
                     })
                     .catch((error) => {
                       console.log(error);
@@ -66,6 +70,22 @@ function ServiceList() {
           )}
         />
       </View>
+      <Snackbar
+        visible={snackVisible}
+        duration={2000}
+        onDismiss={() => {
+          setSnackVisible(false);
+        }}
+        wrapperStyle={{
+          bottom: 0,
+          left: 0,
+        }}
+        style={{
+          backgroundColor: colors.navbarBg,
+        }}
+      >
+        Заказ отправлен!
+      </Snackbar>
     </View>
   );
 }

@@ -51,6 +51,14 @@ const styles = StyleSheet.create({
     fontWeight: 500,
     color: colors.white,
   },
+  loginError: {
+    borderColor: colors.redError,
+    borderWidth: 1,
+    fontSize: 20,
+    paddingVertical: 5,
+    paddingHorizontal: 5,
+    borderRadius: 5,
+  },
 });
 
 export default styles;

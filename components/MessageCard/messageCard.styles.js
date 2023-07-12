@@ -9,6 +9,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: 10,
     position: "relative",
+
+    marginBottom: 10,
   },
   upper: {
     flexDirection: "row",

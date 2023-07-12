@@ -11,6 +11,8 @@ import { useStoreActions } from "easy-peasy";
 function OrderCard({ order, status, statusColor, buttonText, url }) {
   const [isIconPressed, setIsIconPressed] = useState(false);
   const [isInProcess, setIsInProcess] = useState(false);
+  const [postUrl, setPostUrl] = useState("");
+  const [deleteUrl, setDeleteUrl] = useState("");
 
   const setRefresh = useStoreActions(
     (actions) => actions.ordersModel.setIsOrderRefresh
@@ -18,9 +20,11 @@ function OrderCard({ order, status, statusColor, buttonText, url }) {
 
   useEffect(() => {
     if (status === "Новая") {
-      setIsInProcess(true);
+      setPostUrl("accepted");
+      setDeleteUrl("sended");
     } else if (status === "В процессе") {
-      setIsInProcess(false);
+      setPostUrl("done");
+      setDeleteUrl("accepted");
     }
   }, [status]);
 
@@ -69,9 +73,7 @@ function OrderCard({ order, status, statusColor, buttonText, url }) {
                   setRefresh(true);
                   await axios
                     .post(
-                      isInProcess
-                        ? `http://${server}:5005/api/service/accepted/${order.item._id}`
-                        : `http://${server}:5005/api/service/done/${order.item._id}`,
+                      `http://${server}:5005/api/service/${postUrl}/${order.item._id}`,
                       {
                         description: order.item.description,
                         Options: order.item.Options,
@@ -80,16 +82,13 @@ function OrderCard({ order, status, statusColor, buttonText, url }) {
                         comments: "",
                       }
                     )
+
                     .then(async (res) => {
                       await axios
                         .delete(
-                          isInProcess
-                            ? `http://${server}:5005/api/service/sended/${order.item._id}`
-                            : `http://${server}:5005/api/service/accepted/${order.item._id}`
+                          `http://${server}:5005/api/service/${deleteUrl}/${order.item._id}`
                         )
-                        .then(() => {
-                          setRefresh(false);
-                        })
+                        .then(() => {})
 
                         .catch((error) => {
                           console.log(error);
@@ -113,9 +112,9 @@ function OrderCard({ order, status, statusColor, buttonText, url }) {
               style={{ ...styles.btn, ...styles.btnDelete }}
               onPress={async () => {
                 setRefresh(true);
-                await axios.delete(`${url}/${order.item._id}`).then((res) => {
-                  console.log(res.data);
-                });
+                await axios
+                  .delete(`${url}/${order.item._id}`)
+                  .then((res) => {});
               }}
             >
               <Text

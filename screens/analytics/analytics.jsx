@@ -6,6 +6,7 @@ import { DatePickerModal } from "react-native-paper-dates";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { FontAwesome, Feather } from "@expo/vector-icons";
 import { colors } from "../../constants/theme";
+import { FlatList } from "react-native-gesture-handler";
 
 const analyticsList = [
   {
@@ -50,7 +51,10 @@ function Analytics() {
   );
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView
+      style={{ ...styles.container, flex: 1 }}
+      contentContainerStyle={{ flexGrow: 1 }}
+    >
       <View>
         <TouchableOpacity
           onPress={() => setOpen(true)}

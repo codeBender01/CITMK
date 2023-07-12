@@ -10,10 +10,11 @@ import { DefaultTheme } from "@react-navigation/native";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
 import { createStackNavigator } from "@react-navigation/stack";
-import { useStoreState } from "easy-peasy";
+import { useStoreActions, useStoreState } from "easy-peasy";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import server from "./constants/server";
+import img from "./assets/images/bg1.jpg";
 
 const LoginStack = createStackNavigator();
 
@@ -48,25 +49,41 @@ export default function App() {
     InterMed: require("./assets/fonts/Inter-Medium.ttf"),
   });
   const [bgImage, setBgImage] = useState(null);
-  const [unreadMessageCount, setUnreadMessageCount] = useState(null);
+  const [unreadMessageCount, setUnreadMessageCount] = useState(0);
   const isLoggedIn = useStoreState((state) => state.loginModel.isLoggedIn);
   const tabs = useStoreState((state) => state.loginModel.tabs);
+  const refresh = useStoreState(
+    (state) => state.messagesModel.isMessagesRefresh
+  );
 
   const getData = async () => {
     const res = await AsyncStorage.getItem("imagePath");
     setBgImage(JSON.parse(res));
   };
 
-  useEffect(() => {
-    const fetchMessages = async () => {
-      await axios.get(`http://${server}:5005/api/message/read`).then((res) => {
-        setUnreadMessageCount(res.data.result);
-      });
-    };
+  const setTheImage = async () => {
+    const res = await AsyncStorage.getItem("imagePath");
+    if (res) {
+      return;
+    }
+    await AsyncStorage.setItem("imagePath", JSON.stringify(img));
+  };
 
+  const fetchMessages = async () => {
+    await axios.get(`http://${server}:5005/api/message/read`).then((res) => {
+      setUnreadMessageCount(res.data.result);
+    });
+  };
+
+  useEffect(() => {
     fetchMessages();
     getData();
+    setTheImage();
   }, []);
+
+  useEffect(() => {
+    fetchMessages();
+  }, [refresh]);
 
   useEffect(() => {
     const wallInt = setInterval(() => {
@@ -132,10 +149,7 @@ export default function App() {
                       tabBarItemStyle: {
                         paddingVertical: 5,
                       },
-                      tabBarBadge:
-                        tab.tabBarBadge && unreadMessageCount !== 0
-                          ? unreadMessageCount
-                          : null,
+                      tabBarBadge: tab.tabBarBadge ? unreadMessageCount : null,
                     }}
                   />
                 );

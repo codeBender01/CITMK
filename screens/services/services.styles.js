@@ -1,12 +1,12 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 import { colors, fonts } from "../../constants/theme";
 
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    height: "100%",
-    paddingVertical: 50,
+    height: Dimensions.get("window").height,
     paddingHorizontal: 25,
+    paddingTop: 50,
     marginHorizontal: "auto",
     position: "relative",
     backgroundColor: colors.white,
@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: "40%",
     marginLeft: "auto",
+    marginBottom: 50,
   },
   addServiceText: {
     fontFamily: fonts.regular,

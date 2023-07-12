@@ -8,6 +8,7 @@ const colors = {
   mainFont: "#232325",
   secFont: "#6F727A",
   infoFont: "#363636",
+  redError: "#FFCCCC",
 };
 
 const fonts = {

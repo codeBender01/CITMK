@@ -6,9 +6,9 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     height: Dimensions.get("window").height,
-    paddingVertical: 50,
     paddingHorizontal: 25,
     marginHorizontal: "auto",
+    paddingTop: 30,
   },
   wrap: {
     backgroundColor: colors.navbarBg,
@@ -55,6 +55,20 @@ const styles = StyleSheet.create({
     color: colors.navbarBg,
     fontSize: 18,
     fontFamily: fonts.medium,
+  },
+  logout: {
+    backgroundColor: colors.white,
+    borderRadius: 5,
+    width: "50%",
+    alignSelf: "flex-end",
+    marginTop: 10,
+    paddingVertical: 5,
+  },
+  logoutText: {
+    fontSize: 20,
+    textAlign: "center",
+    fontFamily: fonts.bold,
+    color: colors.navbarBg,
   },
 });
 

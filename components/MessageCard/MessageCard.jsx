@@ -39,6 +39,10 @@ function MessageCard(props) {
         <TouchableOpacity
           onPress={async () => {
             setIsIconPressed(!isIconPressed);
+            if (read) {
+              return;
+            }
+            setRefresh(true);
             await axios
               .patch(`http://${server}:5005/api/message/read/${id}`, {
                 read: true,

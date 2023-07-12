@@ -1,19 +1,18 @@
 import { useState } from "react";
-import { Platform } from "react-native";
 import useFetch from "./useFetch";
 import server from "../constants/server";
 
 const useSignup = () => {
   const [errorSignup, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(null);
-  const baseUrl = Platform.OS === "android" ? server : "localhost";
+
   const { refetch, data } = useFetch("user");
 
   const signup = async (name, organization, email, role, password) => {
     setIsLoading(true);
     setError(null);
 
-    const response = await fetch(`http://${baseUrl}:5005/api/user/register`, {
+    const response = await fetch(`http://${server}:5005/api/user/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, organization, email, role, password }),
